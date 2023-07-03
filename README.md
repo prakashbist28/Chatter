@@ -43,9 +43,11 @@ To chat with other users, One can click on their contact and start chatting
 
 Following is conversation between two different users
 
-![image](https://github.com/prakashbist28/Chatter/assets/113052349/a1cc35dd-4fdb-43f4-a65e-2485da412065)
+![image](https://github.com/prakashbist28/Chatter/assets/113052349/3c78b6dd-e4b7-47ed-ac0d-91356cfed85c)
 
-![image](https://github.com/prakashbist28/Chatter/assets/113052349/2c8ec253-cb20-4db5-aa04-6cb4c0e72334)
+
+![image](https://github.com/prakashbist28/Chatter/assets/113052349/4a19f184-c721-4d02-b970-15ed12cc4b16)
+
 
 Logout:
 
