@@ -1,4 +1,4 @@
-                       CHATTER
+                                 CHATTER
  
 Chatter is a full stack chat application, It lets users to register, login and then chat with each other. It is implemented with the help of MERN stack, socket.io
 
@@ -19,21 +19,23 @@ Login:
 On opening the website one would meet this particular login page,
 If user already registered with app they can login else they would have to register by clicking on register link
 
-![image](https://github.com/prakashbist28/Chatter/assets/113052349/31c62302-2f16-4c40-810c-b01659fd6c93)
+![image](https://github.com/prakashbist28/Chatter/assets/113052349/4bea113f-9720-47ff-b41c-0b9519d357fb)
+
 
 
 Register:
 
 Users can register here
 
-![image](https://github.com/prakashbist28/Chatter/assets/113052349/27a47854-9b62-4aa0-af9a-3f6e11cac98f)
+![image](https://github.com/prakashbist28/Chatter/assets/113052349/0d9ab4db-dbf9-4c85-a3de-800ab638aee2)
+
 
 
 Chat: 
 
 Once user logs in he would be met with this page
 
-![image](https://github.com/prakashbist28/Chatter/assets/113052349/bd9fda6d-a602-4714-87a4-54bf702ff3fe)
+![image](https://github.com/prakashbist28/Chatter/assets/113052349/365e4194-62a2-4672-91b7-c8f14cc9e5ac)
 
 Users Chat:
 
@@ -48,6 +50,7 @@ Following is conversation between two different users
 Logout:
 
 To logout one can click on the button at top right corner of chat, user will be sent to login page
-![image](https://github.com/prakashbist28/Chatter/assets/113052349/ce15cb85-a5c5-4b6b-b167-5315f456d2ea)
+![image](https://github.com/prakashbist28/Chatter/assets/113052349/d5f9dece-5a91-49dc-9eba-442be06b7a3c)
+
 
 
