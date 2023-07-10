@@ -41,8 +41,8 @@ function ChatContainer({ currentchat, currentuser, socket }) {
           fromSelf: false,
         }));
 
-        // Combine sent and received messages
         const allMessages = [...sentMessages, ...receivedMessages];
+        allMessages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
         setMessages(allMessages);
       } catch (error) {
         console.log(error);
