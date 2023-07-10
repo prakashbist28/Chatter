@@ -32,12 +32,13 @@ module.exports.getAllMessage = async(req,res,next) => {
             users:{
                 $all:{from,to},
             }
-        }).sort({updatedAt: 1})
+        }).sort({ createdAt: 1})
 
         const projectedMessages = messages.map((msg)=>{
             return{
                 fromSelf:msg.sender.toString() === from,
                 message: msg.message.text,
+                createdAt: msg.createdAt,
             }
         })
         res.json(projectedMessages)
