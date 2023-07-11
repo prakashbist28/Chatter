@@ -9,8 +9,8 @@ import { SetAvatarRoute } from '../utils/APIroutes';
 import { Buffer } from "buffer";
 
 const SetAvatar = () => {
-//api for avatar
-    const api = 'http://api.multiavatar.com/45678945';
+
+    const api = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
     const [avatars, setavatars]=useState([]);
     const [isloading, setisloading]= useState(true);
@@ -24,7 +24,7 @@ const SetAvatar = () => {
         theme: "dark",
     }
 
-     //if no user in local storage navigate to /
+
      useEffect(()=> {
         if(!localStorage.getItem('chatter-users')) {
           navigate('/login')
