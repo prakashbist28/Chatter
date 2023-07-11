@@ -4,12 +4,20 @@ Chatter is a full stack chat application, It lets users to register, login and t
 
 
 Technologies used:
+
 •	React js
+
 •	Node js
+
 •	Express
+
 •	Mongo db
+
 •	Bcrypt
+
 •	Socket.io
+
+
 
 
 Screenshots:
