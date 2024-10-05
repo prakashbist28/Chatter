@@ -3,7 +3,7 @@ import { styled } from 'styled-components'
 import Robot from '../assets/robot.gif'
 import Logout from './Logout'
 
-function Welcome({currentuser}) {
+function Messages({currentuser}) {
   return (
     <Container>
       <Logout />
@@ -27,4 +27,4 @@ span{
 }
 `
 
-export default Welcome
+export default Messages

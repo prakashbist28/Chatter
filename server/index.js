@@ -11,7 +11,7 @@ require('dotenv').config();
 
 app.use(cors());
 app.use(express.json());
-
+ 
 app.use("/api/auth",userRoutes)//public folder
 app.use("/api/messages", messageRoute )
 

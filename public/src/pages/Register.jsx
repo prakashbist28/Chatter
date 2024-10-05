@@ -6,9 +6,13 @@ import {ToastContainer, toast} from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
 import axios from 'axios'
 import { registerRoute } from '../utils/APIroutes';
+import { FaArrowRightLong } from "react-icons/fa6";
+import Blob from '../assets/Blob';
+import ScaleLoader from "react-spinners/ScaleLoader";
 
 function Register() {
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(false);
 
     const [values,setvalues]= useState({
         username: "",
@@ -35,6 +39,7 @@ function Register() {
     const handleSubmit = async(event) => {
         event.preventDefault();
         if(handleValidation()){
+            setLoading(true)
             const {password,username,email} = values;
             const {data}= await axios.post(registerRoute, {
                 username,
@@ -42,9 +47,11 @@ function Register() {
                 password,
             });
             if(data.status===false){
+                setLoading(false)
                 toast.error(data.msg, toastOptions)
             }
             if(data.status===true){
+                setLoading(false)
                 localStorage.setItem('chatter-users',JSON.stringify(data.user));
                 navigate("/");
             }
@@ -78,6 +85,7 @@ function Register() {
   return (
   <>
   <FormContainer >
+    <Blob />
     <form onSubmit={(event)=>handleSubmit(event)}>
         <div className='brand'>
             <img src={Logo} alt="logo" />
@@ -107,10 +115,19 @@ function Register() {
            name="confirmPassword" 
            onChange={(e)=>handleChange(e)}
         /> 
-        <button type="submit"> Create user </button>
+        <button type="submit">
+                        <span className='circle'>
+                        <FaArrowRightLong  className='arrow' />
+                        </span>
+                        <span className='text'>
+                         Register 
+                         </span>
+                    </button>
         <span> 
             Already have an account ? <Link to="/login">Login</Link>
         </span>
+
+        {loading && <div className='loading'><ScaleLoader  /></div>}
     </form>
   </FormContainer>
   <ToastContainer />
@@ -122,6 +139,7 @@ function Register() {
 const FormContainer = styled.div`
    height: 100vh;
    width: 100vw;
+   margin-bottom: 40px;
    display: flex;
    flex-direction:column;
    justify-content :center;
@@ -133,62 +151,180 @@ const FormContainer = styled.div`
     align-items: center;
     gap:1rem;
     justify-content:center;
-    img{ 
-        height:5rem
-    }
+    
+    img {
+            height: 8rem;
+            filter: drop-shadow(0px 0px 5px #a200ff);
+        }
+
     h1{
-        color:white;
+        font-size: 3rem;
+        color: transparent;
+        font-weight: bolder;
+        background: linear-gradient(to right,#f986ff, #9d57ff);
+        -webkit-background-clip: text;
         text-transform: uppercase;
+    }
+    h1:hover{
+        background: linear-gradient(to right, #9d57ff, #f986ff);
+        -webkit-background-clip: text;
     }
     
    }
    form{
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    background-color: #00000076;
-    border-radius:2rem;
-    padding : 3rem;
+    z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 90%;
+        max-width: 40rem;
+        gap: 2rem;
+        border: 2px solid #5800b0;
+        box-shadow: 0rem 0rem 100rem #5800b0;
+        backdrop-filter: blur(50px);
+        border-radius: 2rem;
+        padding: 3rem;
+
     input{
-        color:white;
-        background-color: transparent;
-        padding: 1rem;
-        border: 0.1rem solid blueviolet;
-        border-style:solid ;
-        border-radius: 0.4rem;
-        font-size: 1rem;
+        color: white;
+            background-color: transparent;
+            width: 100%;
+            padding: 1rem;
+            border: 0.1rem solid blueviolet;
+            border-style: solid;
+            border-radius: 0.4rem;
+            font-size: 1rem;
         &:focus {
             border:0.1rem solid #ff00ff;
             outline:none;
             color:white;
         }
     }
-    button{
-        padding:1rem;
-        color: white;
-        background-color: blueviolet;
-        border: 0.1rem solid blueviolet;
-        border-radius:1rem;
-        cursor: pointer;
-        font-weight: bold;
-        text-transform: uppercase;
-        transition: 0.25s;
-        &:hover{
-            background-color:#ff00ff;
-        }
-    }
-    span{
-        color:white;
-        a{
-            color: blueviolet;
+    button {
+            z-index: 1;
+            width: 60%;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            color: white;
+            background-color: blueviolet;
+            border: 0.1rem solid blueviolet;
+            border-radius: 50px;
+            cursor: pointer;
             font-weight: bold;
-            text-decoration: none;
-            &:hover{
-                color: #ff00ff;
+            font-size: 22px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            transition: 0.5s ease-in-out;
+
+        }
+
+        button:hover{
+            box-shadow: 0px 0px 20px blueviolet;
+        }
+
+        .text{
+            z-index: 10;
+        }
+
+        .circle{
+            z-index: 2;
+            position: absolute;
+            height:60px;
+            width: 60px;
+            left: 0;
+            border-radius: 50px;
+            background-color: black;
+            transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        button:hover .circle{
+            width: 100%;
+        }
+
+        .arrow {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            left: 10px;
+            z-index: 10;
+            transition: 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+       
+        }
+
+        button:hover .arrow {
+      
+            left: 80%;
+          
+        }
+
+        
+        span {
+            color: white;
+            font-size: medium;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            a {
+                color: #a749fe;
+                font-weight: bold;
+                margin-left: 1rem;
+                text-decoration: none;
+
+                &:hover {
+                    color: #ff00ff;
+                }
             }
+        } 
+        
+        .loading{
+        width: 100px;
+        height:100px;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #9d57ff;
+        position: absolute;
+        z-index: 20;
+    }
+
+}
+
+@media (max-width: 700px) {
+        
+        .brand{img {
+            height: 4rem;
+            width: auto;
+            filter: drop-shadow(0px 0px 5px #a200ff);
+        }
+        h1{
+            font-size: 28px;
         }
     }
-}
+
+
+        form {
+            width: 90%;
+            padding: 2rem;
+
+            input {
+                width: 100%;
+            }
+
+            button {
+            font-size: 18px;
+            width: 100%;
+        }
+        }
+
+        
+    }
 `;
 
 export default Register

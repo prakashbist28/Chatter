@@ -12,10 +12,10 @@ module.exports.register = async(req,res,next) => {
 
     const emailCheck = await User.findOne({email});
     if(emailCheck){
-        return res.json({msg: "email already used", status: false})
+        return res.json({msg: "Email id is already registered", status: false})
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);//10 is salt value
+    const hashedPassword = await bcrypt.hash(password, 10);//salt 
     const user = await User.create({ //to insert items into db
         email,
         username,
