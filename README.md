@@ -2,6 +2,8 @@
  
 Chatter is a full stack chat application, It lets users to register, login and then chat with each other. It is implemented with the help of MERN stack, socket.io
 
+Live : [https://chatter-pb.onrender.com];
+
 
 Technologies used:
 
