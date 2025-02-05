@@ -28,12 +28,20 @@ const server = app.listen(process.env.PORT, () => {
     console.log(`server started on port ${process.env.PORT}`)
 });
 
-const io = socket(server,{
-    cors:{
-        origin: "https://chatter-pb.onrender.com",
+const io = socket(server, {
+    cors: {
+        origin: (origin, callback) => {
+            const allowedOrigins = ["http://localhost:3000", "https://chatter-pb.onrender.com"];
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by CORS"));
+            }
+        },
         credentials: true,
     }
-})
+});
+
 
 global.onlineUsers = new Map()//store all online users here
 
