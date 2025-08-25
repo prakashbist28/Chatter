@@ -21,8 +21,9 @@ module.exports.register = async(req,res,next) => {
         username,
         password:hashedPassword,
     }); //returns user id and all info of user
-    delete user.password;//we dont need password
-    return res.json({status:true, user})
+    const userObj = user.toObject();
+    delete userObj.password;
+    return res.json({status:true, userObj })
     }
     catch (ex){
         next(ex);
@@ -56,10 +57,10 @@ module.exports.setavatar = async(req,res,next)=>{
     try{
         const userId = req.params.id;
         const avatarImage = req.body.image;
-        const userData = await User.findByIdAndUpdate(userId,{
-            isAvatarImageSet:true,
-            avatarImage,
-        });
+        const userData = await User.findByIdAndUpdate(userId, 
+            { isAvatarImageSet: true, avatarImage },
+            { new: true } 
+            );
         return res.json({
             isSet:userData.isAvatarImageSet,
             image:userData.avatarImage

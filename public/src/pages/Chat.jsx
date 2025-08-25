@@ -29,15 +29,23 @@ function Chat() {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!localStorage.getItem('chatter-users')) {
+      const storedUser = localStorage.getItem('chatter-users');
+      if (!storedUser) {
         navigate('/login');
       } else {
-        setcurrentuser(await JSON.parse(localStorage.getItem('chatter-users')));
-        setisloaded(true);
+        try {
+          setcurrentuser(JSON.parse(storedUser));
+          setisloaded(true);
+        } catch (err) {
+          console.error("Invalid JSON in chatter-users:", err);
+          localStorage.removeItem('chatter-users'); // clear corrupted data
+          navigate('/login');
+        }
       }
     };
     fetchData();
   }, [navigate]);
+  
 
   useEffect(() => {
     if (currentuser) {
