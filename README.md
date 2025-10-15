@@ -45,9 +45,12 @@ Users can register here
 
 **Chat**: 
 
-Once user logs in he would be met with this page
+Once user logs in he would be met with this page, it displays all users and green/grey dot on chat icons indicate user is online/offline and also displays count if unread messages
 
-![home-chatter](https://github.com/user-attachments/assets/b7303cef-6f71-42b6-a2c3-185d51f987f3)
+<img width="1759" height="923" alt="image" src="https://github.com/user-attachments/assets/c972959c-3c52-47e3-bd11-27793baba5b6" />
+
+
+
 
 
 **Search**:
@@ -59,12 +62,13 @@ Once user logs in he would be met with this page
 
 **Users Chat**:
 
-To chat with other users, One can click on their contact and start chatting
+To chat with other users, One can click on their contact and start chatting. It shows user online/offline status as well
 
 Following is conversation between two different users
 
 
-![chat-chatter](https://github.com/user-attachments/assets/be302855-21d3-4434-a304-9c38ca9fbb42)
+<img width="1759" height="923" alt="image" src="https://github.com/user-attachments/assets/f5687b8f-b546-4bf6-95ac-4214cd4a9774" />
+
 
 
 
