@@ -1,6 +1,6 @@
                                                         CHATTER
  
-Chatter is a full stack chat application, It lets users to register, login and then chat with each other. It is implemented with the help of MERN stack, socket.io
+Chatter is a full stack chat application, It lets users to register, login and then chat with each other. Implemented features like unread messages, search functionality, online/offline status. It is implemented with the help of MERN stack, socket.io
 
 <br>
 
