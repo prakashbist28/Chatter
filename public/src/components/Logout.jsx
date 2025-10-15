@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { LuLogOut } from "react-icons/lu";
+import { AppContext } from '../context/AppContext'; // ✅ get context
 
 function Logout() {
   const navigate = useNavigate();
   const [out, setOut] = useState(false);
+  const { currentuser, socket, setOnlineUsers } = useContext(AppContext); // ✅ access socket & user
 
   const handleClick = async () => {
+    // ✅ Emit logout before clearing storage
+    if (socket?.current && currentuser?._id) {
+      socket.current.emit("user-logout", currentuser._id);
+      socket.current.disconnect(); // ✅ force disconnect so backend updates status
+    }
+
+    // ✅ Then clear and navigate
     localStorage.clear();
     navigate("/login");
   };
 
   const handleLogout = () => {
     setOut(!out);
+    setOnlineUsers({});
   };
 
   return (
@@ -26,8 +36,8 @@ function Logout() {
           <div className="confirm">
             <h1 className="ques">Do you want to logout?</h1>
             <div className='btns'>
-            <button className="confirm-btn yes" onClick={handleClick}>Yes</button>
-            <button className="confirm-btn no" onClick={handleLogout}>No</button>
+              <button className="confirm-btn yes" onClick={handleClick}>Yes</button>
+              <button className="confirm-btn no" onClick={handleLogout}>No</button>
             </div>
           </div>
         </div>
@@ -35,6 +45,7 @@ function Logout() {
     </LogoutContainer>
   );
 }
+
 
 const LogoutContainer = styled.div`
   position: relative;

@@ -27,12 +27,17 @@ function Login() {
     theme: "dark",
   };
 
-  // to keep user logged in at chat page
+  // Check if user is already logged in
   useEffect(() => {
-    if (localStorage.getItem("chatter-users")) {
-      navigate("/");
+    const storedUser = JSON.parse(localStorage.getItem("chatter-users"));
+    if (storedUser) {
+      if (!storedUser.isAvatarImageSet) {
+        navigate("/setAvatar"); // redirect first-time users to set avatar
+      } else {
+        navigate("/"); // redirect to chat page
+      }
     }
-  }, []);
+  }, [navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -40,18 +45,33 @@ function Login() {
     if (handleValidation()) {
       setLoading(true);
       const { password, username } = values;
-      const { data } = await axios.post(loginRoute, {
-        username,
-        password,
-      });
-      if (data.status === false) {
+
+      try {
+        const { data } = await axios.post(loginRoute, {
+          username,
+          password,
+        });
+
+        if (data.status === false) {
+          setLoading(false);
+          toast.error(data.msg, toastOptions);
+        }
+
+        if (data.status === true) {
+          setLoading(false);
+          localStorage.setItem("chatter-users", JSON.stringify(data.user));
+
+          // Redirect based on avatar setup
+          if (!data.user.isAvatarImageSet) {
+            navigate("/setAvatar");
+          } else {
+            navigate("/");
+          }
+        }
+      } catch (err) {
         setLoading(false);
-        toast.error(data.msg, toastOptions);
-      }
-      if (data.status === true) {
-        setLoading(false);
-        localStorage.setItem("chatter-users", JSON.stringify(data.user));
-        navigate("/");
+        toast.error("Login failed. Please try again.", toastOptions);
+        console.error(err);
       }
     }
   };
@@ -59,11 +79,8 @@ function Login() {
   const handleValidation = () => {
     const { password, username } = values;
 
-    if (password === "") {
-      toast.error("username and password are required", toastOptions);
-      return false;
-    } else if (username.length === "") {
-      toast.error("username and password are required", toastOptions);
+    if (!username || !password) {
+      toast.error("Username and password are required", toastOptions);
       return false;
     }
     return true;
@@ -77,7 +94,7 @@ function Login() {
     <>
       <FormContainer>
         <Blob />
-        <form onSubmit={(event) => handleSubmit(event)}>
+        <form onSubmit={handleSubmit}>
           <div className="brand">
             <img src={Logo} alt="logo" />
             <h1>Chatter</h1>
@@ -86,14 +103,14 @@ function Login() {
             type="text"
             placeholder="username"
             name="username"
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
             min="3"
           />
           <input
             type="password"
             placeholder="password"
             name="password"
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
           />
 
           <button type="submit">
@@ -104,7 +121,7 @@ function Login() {
           </button>
 
           <span>
-            Don't have an account ? <Link to="/register">Register</Link>
+            Don't have an account? <Link to="/register">Register</Link>
           </span>
 
           {loading && (
@@ -114,8 +131,7 @@ function Login() {
           )}
         </form>
         <h1 className="demotext">
-          {" "}
-          For demo( Username : demo1 , password : Demo@123 )
+          For demo (Username: demo1, Password: Demo@123)
         </h1>
       </FormContainer>
 
@@ -148,7 +164,6 @@ const FormContainer = styled.div`
     }
 
     h1 {
-      color: white;
       text-transform: uppercase;
       font-size: 3rem;
       color: transparent;
@@ -185,7 +200,6 @@ const FormContainer = styled.div`
       width: 100%;
       padding: 1rem;
       border: 0.1rem solid blueviolet;
-      border-style: solid;
       border-radius: 0.4rem;
       font-size: 1rem;
 
@@ -197,7 +211,6 @@ const FormContainer = styled.div`
     }
 
     button {
-      z-index: 1;
       width: 60%;
       height: 60px;
       display: flex;
@@ -291,13 +304,9 @@ const FormContainer = styled.div`
   }
 
   @media (max-width: 700px) {
-    height: 100vh;
-
     .brand {
       img {
         height: 4rem;
-        width: auto;
-        filter: drop-shadow(0px 0px 5px #a200ff);
       }
       h1 {
         font-size: 28px;

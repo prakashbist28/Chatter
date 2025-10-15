@@ -33,7 +33,7 @@ const SetAvatar = () => {
       const data = [];
       for (let i = 0; i < 4; i++) {
         const svgCode = multiavatar(Math.round(Math.random() * 1000));
-        const base64 = btoa(svgCode); // convert SVG string → base64
+        const base64 = btoa(svgCode); 
         data.push(base64);
       }
       setAvatars(data);

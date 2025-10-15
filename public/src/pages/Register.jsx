@@ -52,6 +52,7 @@ function Register() {
             }
             if(data.status===true){
                 setLoading(false)
+                alert("User registration successful");
                 localStorage.setItem('chatter-users',JSON.stringify(data.user));
                 navigate("/");
             }

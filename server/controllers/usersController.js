@@ -45,8 +45,9 @@ module.exports.login = async(req,res,next) => {
     if(!isPasswordValid){
         return res.json({msg:"Incorrect username or password", status:false})
     }
-    delete user.password;//we dont need password
-    return res.json({status:true, user})
+    const userObj = user.toObject();
+    delete userObj.password;
+    return res.json({status:true, user : userObj})
     }
     catch (ex){
         next(ex);

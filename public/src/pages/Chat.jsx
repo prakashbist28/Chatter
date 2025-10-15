@@ -1,83 +1,63 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { allUsersRoute, host } from '../utils/APIroutes';
-import Contacts from '../components/Contacts';
-import Welcome from '../components/Welcome';
-import ChatContainer from '../components/ChatContainer';
-import { io } from 'socket.io-client';
-import Header from '../components/Header';
+import React, { useContext, useEffect, useState } from "react";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+import Contacts from "../components/Contacts";
+import ChatContainer from "../components/ChatContainer";
+import Welcome from "../components/Welcome";
+import Header from "../components/Header";
 
 function Chat() {
-  const socket = useRef();
-  const [contacts, setcontacts] = useState([]);
-  const [currentuser, setcurrentuser] = useState(undefined);
-  const navigate = useNavigate();
-  const [currentChat, setCurrentChat] = useState(undefined);
-  const [isloaded, setisloaded] = useState(false);
+  const {
+    currentuser,
+    setcurrentuser,
+    currentChat,
+    setCurrentChat,
+    contacts,
+    setcontacts,
+    socket,
+    isLoaded,
+    setIsLoaded,
+    markMessagesAsRead, // <-- get from context
+  } = useContext(AppContext);
+
   const [showChatContainer, setShowChatContainer] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const storedUser = localStorage.getItem('chatter-users');
-      if (!storedUser) {
-        navigate('/login');
-      } else {
-        try {
-          setcurrentuser(JSON.parse(storedUser));
-          setisloaded(true);
-        } catch (err) {
-          console.error("Invalid JSON in chatter-users:", err);
-          localStorage.removeItem('chatter-users'); // clear corrupted data
-          navigate('/login');
-        }
+    const storedUser = localStorage.getItem("chatter-users");
+    if (!storedUser) navigate("/login");
+    else {
+      try {
+        setcurrentuser(JSON.parse(storedUser));
+        setIsLoaded(true);
+      } catch (err) {
+        console.error(err);
+        localStorage.removeItem("chatter-users");
+        navigate("/login");
       }
-    };
-    fetchData();
-  }, [navigate]);
-  
-
-  useEffect(() => {
-    if (currentuser) {
-      socket.current = io(host);
-      socket.current.emit('add-user', currentuser._id);
     }
-  }, [currentuser]);
+  }, [navigate, setcurrentuser, setIsLoaded]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (currentuser) {
-        if (currentuser.isAvatarImageSet) {
-          const data = await axios.get(`${allUsersRoute}/${currentuser._id}`);
-          setcontacts(data.data);
-        } else {
-          navigate('/setavatar');
-        }
-      }
-    };
-    fetchData();
-  }, [currentuser, navigate]);
-
+  // Mark as read when opening a chat
   const handleChatChange = (chat) => {
     setCurrentChat(chat);
-    if (windowWidth < 800) {
-      setShowChatContainer(true); 
+    if (chat && chat._id) {
+      markMessagesAsRead(chat._id);
     }
+    if (windowWidth < 800) setShowChatContainer(true);
   };
 
   const handleBackToContacts = () => {
-    setCurrentChat(undefined); // Reset currentChat when going back to contacts
-    setShowChatContainer(false); 
+    setCurrentChat(undefined);
+    setShowChatContainer(false);
   };
 
   return (
@@ -87,37 +67,17 @@ function Chat() {
         <div className="container">
           {windowWidth < 800 ? (
             showChatContainer ? (
-              <ChatContainer
-                className="chatcontainer"
-                currentchat={currentChat}
-                currentuser={currentuser}
-                socket={socket}
-                backToContacts={handleBackToContacts} // Pass the function
-              />
+              <ChatContainer backToContacts={handleBackToContacts} />
             ) : (
-              <Contacts
-                contacts={contacts}
-                currentuser={currentuser}
-                changeChat={handleChatChange}
-              />
+              <Contacts changeChat={handleChatChange} />
             )
           ) : (
             <>
-              <Contacts
-                contacts={contacts}
-                currentuser={currentuser}
-                changeChat={handleChatChange}
-              />
-              {isloaded && currentChat === undefined ? (
-                <Welcome currentuser={currentuser} />
+              <Contacts changeChat={handleChatChange} />
+              {isLoaded && !currentChat ? (
+                <Welcome />
               ) : (
-                <ChatContainer
-                  className="chatcontainer"
-                  currentchat={currentChat}
-                  currentuser={currentuser}
-                  socket={socket}
-                  backToContacts={handleBackToContacts} // Pass the function
-                />
+                <ChatContainer backToContacts={handleBackToContacts} />
               )}
             </>
           )}
@@ -141,7 +101,8 @@ const Container = styled.div`
     height: 85vh;
     width: 85vw;
     display: grid;
-    grid-template-columns: 25% 75%;
+    grid-template-columns: 30% 70%;
+
     gap: 10px;
 
     @media screen and (min-width: 800px) and (max-width: 1000px) {
